@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #111B21;
+  --primary-color:#111B21;
+  --secondary-color:#202c33;
+  --tertiary-color:#182229;
+  --text-primary:#E9EDEF;
+  --text-secondary:#8696A0;
+  --green:#00A884;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+    --primary-color:#ffffff;
+    --secondary-color:#f0f2f5;
+    --tertiary-color:#f0f2f5;
+    --text-primary:#111B21;
+    --text-secondary:#667781;
+  }
+}
