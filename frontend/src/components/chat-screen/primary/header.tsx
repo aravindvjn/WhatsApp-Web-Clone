@@ -1,4 +1,4 @@
-import Text from '../../ui/text'
+import Text from '../../../ui/text'
 import { RiChatNewLine } from 'react-icons/ri'
 import { BsThreeDotsVertical } from 'react-icons/bs'
 

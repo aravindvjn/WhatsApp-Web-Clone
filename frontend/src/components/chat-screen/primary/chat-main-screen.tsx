@@ -1,11 +1,14 @@
 import React from "react";
-import Text from "../../ui/text";
 import ChatHeader from "./header";
+import SearchInput from "./search-input";
+import ChatList from "./chat-list";
 
 const ChatMainScreen = () => {
   return (
-    <div>
+    <div className="h-dvh scrollbar-hide">
       <ChatHeader />
+      <SearchInput />
+      <ChatList/>
     </div>
   );
 };

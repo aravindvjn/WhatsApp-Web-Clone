@@ -7,7 +7,7 @@ const HomePage = () => {
   const [page, setPage] = useState<PageType>("chats");
 
   return (
-    <div className="flex">
+    <div className="flex h-dvh overflow-hidden">
       <NavBar setPage={setPage} page={page} />
       <MainSection page={page} />
       <SecondarySection page={page} />

@@ -25,3 +25,13 @@
     --text-secondary:#667781;
   }
 }
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.center{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

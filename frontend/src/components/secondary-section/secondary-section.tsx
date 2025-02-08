@@ -1,12 +1,12 @@
-
+import ChatSecondaryScreen from "../chat-screen/secondary/chat-secondary-screen";
 import type { PageType } from "../nav-bar/nav-bar";
 
 const SecondarySection = ({ page }: { page: PageType }) => {
   let activePage;
-  
+
   switch (page) {
     case "chats":
-      activePage = <div>Chats</div>;
+      activePage = <ChatSecondaryScreen />;
       break;
     case "profile":
       activePage = <div>Profile Page</div>;
@@ -16,7 +16,9 @@ const SecondarySection = ({ page }: { page: PageType }) => {
       break;
   }
 
-  return <div className="w-full bg-secondary">{activePage}</div>;
+  return (
+    <div className="hidden sm:flex sm:w-full bg-primary">{activePage}</div>
+  );
 };
 
 export default SecondarySection;
