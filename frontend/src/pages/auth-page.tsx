@@ -1,8 +1,9 @@
+import AuthForm from "../components/auth-page/form"
 
 const AuthPage = () => {
   return (
-    <div>
-      Auth
+    <div className="center min-h-dvh">
+      <AuthForm/>
     </div>
   )
 }

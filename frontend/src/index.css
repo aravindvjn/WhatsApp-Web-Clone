@@ -12,6 +12,8 @@
   --text-primary:#E9EDEF;
   --text-secondary:#8696A0;
   --green:#00A884;
+  --mychat:#176b5b;
+  --border:rgba(255, 255, 255, 0.10);
 }
 
 @media (prefers-color-scheme: light) {
@@ -23,6 +25,8 @@
     --tertiary-color:#f0f2f5;
     --text-primary:#111B21;
     --text-secondary:#667781;
+    --mychat:#D9FDD3;
+    --border:rgba(0, 0, 0, 0.10);
   }
 }
 
@@ -35,3 +39,4 @@
   justify-content: center;
   align-items: center;
 }
+

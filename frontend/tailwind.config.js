@@ -10,6 +10,8 @@ export default {
         primaryText: "var(--text-primary)",
         secondaryText: "var(--text-secondary)",
         green: "var(--green)",
+        mychat: "var(--mychat)",
+        border: "var(--border)",
       },
     },
   },

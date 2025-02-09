@@ -17,7 +17,7 @@ const MainSection = ({ page }: { page: PageType }) => {
       break;
   }
 
-  return <div className="w-full flex flex-col sm:w-[500px] md:w-[550px] lg:w-[600px]  border-r border-white/10">{activePage}</div>;
+  return <div className="w-full flex flex-col sm:w-[500px] md:w-[550px] lg:w-[600px]  border-r border-border">{activePage}</div>;
 };
 
 export default MainSection;

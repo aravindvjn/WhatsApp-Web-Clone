@@ -1,0 +1,1 @@
+export type SendMessageProps = { chatId: string, receiverId: string, message: string }
