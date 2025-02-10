@@ -13,7 +13,7 @@ const PageOptions = ({
   onClick: (name: PageType) => void;
 }) => {
   const selectedClass =
-    "h-[42px] flex justify-center items-center w-[42px] rounded-full";
+    "h-[42px] flex justify-center items-center w-[42px] rounded-full cursor-pointer";
 
   return (
     <div

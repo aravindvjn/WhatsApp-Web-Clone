@@ -1,8 +1,10 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useChatLists } from "../../hooks/useChatsLists";
 import { useOpenedChat } from "../../hooks/useOpenedChat";
-import { useMessage } from "../../hooks/useMessages";
+import { useNewMessage } from "../../hooks/useMessages";
 import { ChatsType } from "../../components/chat-screen/types";
+import { useCurrentUser } from "../../hooks/useCurrentUser";
+
 
 export const useModifyQuery = () => {
   const queryClient = useQueryClient();
@@ -16,33 +18,51 @@ export const updateChatLists = () => {
   const queryClient = useQueryClient();
   const { data: chatLists } = useChatLists();
   const { data: openedChat } = useOpenedChat();
-  const { data: messages } = useMessage();
+  const { data: newMessages } = useNewMessage()
+  const { data: myData } = useCurrentUser();
 
   return ({ newValues }: { newValues: ChatsType[] }) => {
     if (!newValues.length) return;
 
-    const mergedData = [...(chatLists || [])];
-    const existingIds = new Set(mergedData.map(chat => chat._id));
+    const newMessage = newValues[0];
 
-    for (const newItem of newValues) {
-      if (!existingIds.has(newItem._id)) {
-        mergedData.push(newItem);
-        existingIds.add(newItem._id);
-      }
-    }
+    const mergedData = chatLists
+      ? chatLists.some((item: ChatsType) => item._id === newMessage._id)
+        ? chatLists.map((item: ChatsType) => (item._id === newMessage._id ? newMessage : item))
+        : [...chatLists, newMessage]
+      : [newMessage];
 
     queryClient.setQueryData(["chatLists"], mergedData);
 
-    if (openedChat?._id) {
-      const newMessage = mergedData.find(chat => chat._id === openedChat._id)?.lastMessage;
+    const messageArray = [...(newMessages || []), newMessage.lastMessage!];
 
-      if (newMessage) {
-        const updatedMessages = messages ? [...messages, newMessage] : [newMessage];
-        queryClient.setQueryData(['privateMessage'], updatedMessages);
-      }
-    }
+    const uniqueMessages = messageArray.filter(
+      (msg, index, self) => index === self.findIndex((m) => m._id === msg._id)
+    )
+
+    queryClient.setQueryData(["newMessage"], uniqueMessages);
+
+    queryClient.invalidateQueries<any>(["newMessage"]);
+
 
     queryClient.invalidateQueries<any>(["chatLists"]);
-    queryClient.invalidateQueries<any>(["privateMessage"]);
+
+
+    if (newValues[0].lastMessage?.senderId !== myData?._id) {
+
+      if (openedChat?._id === newValues[0]._id) {
+        queryClient.setQueryData(["notification"], null);
+      } else {
+        queryClient.setQueryData(["notification"], {
+          message: newValues[0].lastMessage?.text,
+          profilePic: newValues[0].otherUser?.profilePic,
+          displayName: newValues[0].otherUser?.displayName,
+          username: newValues[0].otherUser?.username,
+        });
+      }
+
+      // Invalidate notification last
+      queryClient.invalidateQueries<any>(["notification"]);
+    }
   };
 };

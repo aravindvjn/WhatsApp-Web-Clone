@@ -1,9 +1,9 @@
 import Text from "../../../ui/text";
-import { MdAccountCircle } from "react-icons/md";
 import { ChatsType } from "../types";
 import { useOpenedChat } from "../../../hooks/useOpenedChat";
 import { timeAgo } from "../../../utils/helper/time-ago";
 import { useModifyQuery } from "../../../utils/helper/inValidateQuery";
+import ProfileSvg from "../../../ui/profilesvg";
 
 const SingleChat = ({ _id, lastMessage, otherUser }: ChatsType) => {
   const { data: openedChat } = useOpenedChat();
@@ -31,7 +31,23 @@ const SingleChat = ({ _id, lastMessage, otherUser }: ChatsType) => {
         openedChat?._id === _id ? "bg-secondary" : ""
       }`}
     >
-      <MdAccountCircle size={40} />{" "}
+      <div>
+        <div
+          style={{ backgroundColor: "gray" }}
+          className=" rounded-full w-[42px] h-[42px]"
+        >
+          {otherUser?.profilePic ? (
+            <img
+              src={otherUser?.profilePic}
+              alt="profile"
+              className="w-[42px] h-[42px] rounded-full aspect-square object-cover"
+            />
+          ) : (
+            <ProfileSvg size={42} />
+          )}
+        </div>
+      </div>
+
       <div className="flex py-[15px] w-full border-b border-white/10 gap-[10px] justify-between">
         <div>
           <Text fontWeight="semibold" className="line-clamp-1">

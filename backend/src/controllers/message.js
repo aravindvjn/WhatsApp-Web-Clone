@@ -66,7 +66,7 @@ export const getMessages = async (req, res) => {
     }
 
     const messages = await Message.find({ chatId })
-      .limit(10)
+      .limit(24)
       .sort({ timestamp: -1 });
 
     res.status(200).json(messages.reverse());

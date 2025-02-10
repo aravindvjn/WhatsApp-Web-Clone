@@ -12,6 +12,7 @@ export default {
         green: "var(--green)",
         mychat: "var(--mychat)",
         border: "var(--border)",
+        fourthColor: "var(--four-color)",
       },
     },
   },

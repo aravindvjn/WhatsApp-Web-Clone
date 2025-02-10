@@ -6,7 +6,8 @@ export const useCurrentUser = () => {
 
     return useQuery<UserType>({
         queryKey: ["user"],
-        queryFn: getCurrentUser
+        queryFn: getCurrentUser,
+        refetchOnWindowFocus: false,
     });
 }
 

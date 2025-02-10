@@ -9,6 +9,7 @@
   --primary-color:#111B21;
   --secondary-color:#202c33;
   --tertiary-color:#182229;
+  --four-color:#232e36;
   --text-primary:#E9EDEF;
   --text-secondary:#8696A0;
   --green:#00A884;
@@ -25,6 +26,7 @@
     --tertiary-color:#f0f2f5;
     --text-primary:#111B21;
     --text-secondary:#667781;
+    --four-color:#dfe4e7;
     --mychat:#D9FDD3;
     --border:rgba(0, 0, 0, 0.10);
   }

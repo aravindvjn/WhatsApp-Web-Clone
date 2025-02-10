@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import { FaMicrophone } from "react-icons/fa";
-import { IoAdd } from "react-icons/io5";
 import { useSocket } from "../../../utils/socket/socket";
 import { updateChatLists } from "../../../utils/helper/inValidateQuery";
+import MoreChatOpions from "./more-chatoptions";
 
 const Footer = ({ chatId, otherUser }: { chatId: string; otherUser: any }) => {
   const { sendPrivateMessage } = useSocket();
   const [message, setMessage] = useState<string>("");
 
-  console.log("other",otherUser)
   const modifyChatLists = updateChatLists();
 
   const sendMessageHandler = (e: React.FormEvent) => {
@@ -20,24 +19,24 @@ const Footer = ({ chatId, otherUser }: { chatId: string; otherUser: any }) => {
         receiverId: otherUser._id,
       });
 
-      modifyChatLists({
-        newValues: [
-          {
-            _id: chatId,
-            lastMessage: {
-              _id: new Date().getMilliseconds().toString(),
-              chatId: chatId,
-              senderId: '',
-              text: message,
-              mediaUrl: null,
-              mediaType: "String",
-              status: "String",
-              timestamp: Date.now().toString(),
-            },
-            otherUser,
-          },
-        ],
-      });
+      // modifyChatLists({
+      //   newValues: [
+      //     {
+      //       _id: chatId,
+      //       lastMessage: {
+      //         _id: Date.now().toString(),
+      //         chatId: chatId,
+      //         senderId: "",
+      //         text: message,
+      //         mediaUrl: null,
+      //         mediaType: "String",
+      //         status: "String",
+      //         timestamp: Date.now().toString(),
+      //       },
+      //       otherUser,
+      //     },
+      //   ],
+      // });
 
       setMessage("");
     }
@@ -47,9 +46,7 @@ const Footer = ({ chatId, otherUser }: { chatId: string; otherUser: any }) => {
       onSubmit={sendMessageHandler}
       className="absolute bottom-0 w-full right-0 p-[10px] bg-secondary text-secondaryText flex items-center min-h-[60px]"
     >
-      <button type="button" className="center w-[50px]">
-        <IoAdd size={28} />
-      </button>
+      <MoreChatOpions />
       <input
         value={message}
         onChange={(e) => setMessage(e.target.value)}

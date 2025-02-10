@@ -44,7 +44,7 @@ export const socketConnection = (socket) => {
           } || null,
       }]
 
-      io.to(receiverId).emit("chatLists", {
+      io.to(receiverId).to(user.id).emit("chatLists", {
         newChatList,
       });
 
