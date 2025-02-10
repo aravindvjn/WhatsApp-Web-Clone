@@ -24,12 +24,13 @@ export const socketConnection = (socket) => {
         chatId,
       });
 
-      io.to(receiverId).emit("privateMessage", {
-        message: newMessage.success ? newMessage.message : null,
-        senderId: user.id,
-      });
+      if(!newMessage.success) {
+        socket.emit("error", "Server not responding.");
+        return;
+      }
 
       const otherUser = await User.findById(receiverId);
+
       const newChatList = [{
         _id: newMessage.message.chatId,
         lastMessage: newMessage.message,
@@ -50,6 +51,7 @@ export const socketConnection = (socket) => {
       console.log(
         `Private message from ${user.id} to ${receiverId}: ${message}`
       );
+      
     } catch (error) {
       console.error("Private message error:", error);
       socket.emit("error", "Failed to send private message.");

@@ -3,13 +3,10 @@ import { MdAccountCircle } from "react-icons/md";
 import { ChatsType } from "../types";
 import { useOpenedChat } from "../../../hooks/useOpenedChat";
 import { timeAgo } from "../../../utils/helper/time-ago";
-import { useSocket } from "../../../utils/socket/socket";
 import { useModifyQuery } from "../../../utils/helper/inValidateQuery";
-import { chats } from "../../../data/chat";
 
 const SingleChat = ({ _id, lastMessage, otherUser }: ChatsType) => {
   const { data: openedChat } = useOpenedChat();
-  const { listenToPrivateMessages } = useSocket();
 
   const modifyQuery = useModifyQuery();
 
@@ -21,7 +18,6 @@ const SingleChat = ({ _id, lastMessage, otherUser }: ChatsType) => {
         otherUser,
       },
     });
-    listenToPrivateMessages();
   };
 
   const lastMessageTime = lastMessage?.timestamp

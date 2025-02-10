@@ -2,38 +2,39 @@ import React, { useState } from "react";
 import { FaMicrophone } from "react-icons/fa";
 import { IoAdd } from "react-icons/io5";
 import { useSocket } from "../../../utils/socket/socket";
-import { useModifyQuery } from "../../../utils/helper/inValidateQuery";
+import { updateChatLists } from "../../../utils/helper/inValidateQuery";
 
-const Footer = ({
-  chatId,
-  receiverId,
-}: {
-  chatId: string;
-  receiverId: string;
-}) => {
+const Footer = ({ chatId, otherUser }: { chatId: string; otherUser: any }) => {
   const { sendPrivateMessage } = useSocket();
   const [message, setMessage] = useState<string>("");
 
-  const modifyQuery = useModifyQuery();
+  console.log("other",otherUser)
+  const modifyChatLists = updateChatLists();
 
   const sendMessageHandler = (e: React.FormEvent) => {
     e.preventDefault();
-    if (message && (chatId || receiverId)) {
+    if (message && (chatId || otherUser._id)) {
       sendPrivateMessage({
         message,
         chatId,
-        receiverId,
+        receiverId: otherUser._id,
       });
 
-      modifyQuery({
-        key: "privateMessages",
+      modifyChatLists({
         newValues: [
           {
-            message,
-            chatId,
-            receiverId,
-            senderId: null,
-            timestamp: new Date().toISOString(),
+            _id: chatId,
+            lastMessage: {
+              _id: new Date().getMilliseconds().toString(),
+              chatId: chatId,
+              senderId: '',
+              text: message,
+              mediaUrl: null,
+              mediaType: "String",
+              status: "String",
+              timestamp: Date.now().toString(),
+            },
+            otherUser,
           },
         ],
       });

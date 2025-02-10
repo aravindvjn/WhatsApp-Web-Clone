@@ -17,7 +17,7 @@ const ChatSecondaryScreen = () => {
       <Chats user_id={currentUser?._id || ""} messages={messages || []} />
       <Footer
         chatId={openedChat?._id || ""}
-        receiverId={openedChat?.otherUser._id || ""}
+        otherUser={openedChat?.otherUser}
       />
     </div>
   );

@@ -2,6 +2,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useChatLists } from "../../hooks/useChatsLists";
 import { useOpenedChat } from "../../hooks/useOpenedChat";
 import { useMessage } from "../../hooks/useMessages";
+import { ChatsType } from "../../components/chat-screen/types";
 
 export const useModifyQuery = () => {
   const queryClient = useQueryClient();
@@ -11,35 +12,37 @@ export const useModifyQuery = () => {
   };
 };
 
-
 export const updateChatLists = () => {
-
   const queryClient = useQueryClient();
-  
-  const { data } = useChatLists();
-  const { data: openedChat } = useOpenedChat()
-  const { data: messages } = useMessage()
+  const { data: chatLists } = useChatLists();
+  const { data: openedChat } = useOpenedChat();
+  const { data: messages } = useMessage();
 
-  return ({ key, newValues }: { key: string; newValues: any }) => {
+  return ({ newValues }: { newValues: ChatsType[] }) => {
+    if (!newValues.length) return;
 
-    const mergedData = [...(data || []), ...newValues].reduce((acc, item) => {
-      acc.set(item._id, item);
-      return acc;
-    }, new Map());
+    const mergedData = [...(chatLists || [])];
+    const existingIds = new Set(mergedData.map(chat => chat._id));
 
-    const newChatList = Array.from(mergedData.values());
-
-    if (openedChat) {
-
-      const newMessage: any = newChatList.filter((message: any) => message._id === openedChat._id)
-
-      queryClient.setQueryData(['privateMessage'], messages ? [messages, ...newMessage.lastMessage] : newMessage.lastMessage);
-      queryClient.invalidateQueries<any>(["privateMessage"]);
-
+    for (const newItem of newValues) {
+      if (!existingIds.has(newItem._id)) {
+        mergedData.push(newItem);
+        existingIds.add(newItem._id);
+      }
     }
 
-    queryClient.setQueryData([key], newChatList);
-    queryClient.invalidateQueries<any>([key]);
+    queryClient.setQueryData(["chatLists"], mergedData);
 
+    if (openedChat?._id) {
+      const newMessage = mergedData.find(chat => chat._id === openedChat._id)?.lastMessage;
+
+      if (newMessage) {
+        const updatedMessages = messages ? [...messages, newMessage] : [newMessage];
+        queryClient.setQueryData(['privateMessage'], updatedMessages);
+      }
+    }
+
+    queryClient.invalidateQueries<any>(["chatLists"]);
+    queryClient.invalidateQueries<any>(["privateMessage"]);
   };
 };
