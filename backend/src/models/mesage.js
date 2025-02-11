@@ -7,6 +7,11 @@ const messageSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
+  receiverId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
   text: { type: String, default: "" },
   mediaUrl: { type: String, default: null },
   mediaType: {

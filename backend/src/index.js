@@ -1,7 +1,7 @@
 import express from "express";
 import { Server } from "socket.io";
 import { connectDB } from "./utils/db.js";
-import { socketConnection } from "./controllers/socket.js";
+import { socketConnection } from "./socket/socket.js";
 import cors from "cors";
 import { routes } from "./routes/index.js";
 import { isAuthenticated } from "./middlewares/is-authenticated.js";
