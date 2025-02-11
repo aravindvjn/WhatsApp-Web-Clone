@@ -1,46 +1,68 @@
 import React, { useState } from "react";
 import { FaMicrophone } from "react-icons/fa";
 import { useSocket } from "../../../utils/socket/socket";
-import { updateChatLists } from "../../../utils/helper/inValidateQuery";
 import MoreChatOpions from "./more-chatoptions";
+import { addNewMessage } from "../../../utils/helper/addNewMessage";
+import { updateChatLists } from "../../../utils/helper/updateChatLists";
+import { MessagesTypes } from "../types";
 
 const Footer = ({ chatId, otherUser }: { chatId: string; otherUser: any }) => {
-  const { sendPrivateMessage } = useSocket();
+  const { sendMessages, socket } = useSocket();
+
+  const [isUserTyping, setIsUserTyping] = useState<boolean>(false);
+
   const [message, setMessage] = useState<string>("");
 
-  const modifyChatLists = updateChatLists();
+  const addNewMessageInstance = addNewMessage();
+  const updateChatListsInstance = updateChatLists();
 
   const sendMessageHandler = (e: React.FormEvent) => {
     e.preventDefault();
+
     if (message && (chatId || otherUser._id)) {
-      sendPrivateMessage({
+      sendMessages({
         message,
         chatId,
         receiverId: otherUser._id,
       });
+      const lastMessage: MessagesTypes = {
+        _id: new Date().getMilliseconds().toString(),
+        chatId: chatId,
+        senderId: "",
+        text: message,
+        mediaUrl: null,
+        mediaType: "none",
+        status: "sent",
+        timestamp: new Date().toLocaleString(),
+      };
+      addNewMessageInstance(lastMessage);
 
-      // modifyChatLists({
-      //   newValues: [
-      //     {
-      //       _id: chatId,
-      //       lastMessage: {
-      //         _id: Date.now().toString(),
-      //         chatId: chatId,
-      //         senderId: "",
-      //         text: message,
-      //         mediaUrl: null,
-      //         mediaType: "String",
-      //         status: "String",
-      //         timestamp: Date.now().toString(),
-      //       },
-      //       otherUser,
-      //     },
-      //   ],
-      // });
+      updateChatListsInstance({
+        _id: chatId,
+        lastMessage,
+        otherUser,
+      });
 
       setMessage("");
     }
   };
+  let typingTimeout: any;
+
+  const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setMessage(e.target.value);
+
+    if (isUserTyping) return;
+    setIsUserTyping(true);
+    socket?.emit("typing", { chatId, receiverId: otherUser._id });
+
+    clearTimeout(typingTimeout);
+
+    typingTimeout = setTimeout(() => {
+      setIsUserTyping(false);
+      socket?.emit("stoppedTyping", { chatId, receiverId: otherUser._id });
+    }, 3000);
+  };
+
   return (
     <form
       onSubmit={sendMessageHandler}
@@ -49,7 +71,7 @@ const Footer = ({ chatId, otherUser }: { chatId: string; otherUser: any }) => {
       <MoreChatOpions />
       <input
         value={message}
-        onChange={(e) => setMessage(e.target.value)}
+        onChange={onChangeHandler}
         className="line-clamp-4 h-[40px] bg-blue-200/20  flex items-center rounded-md w-full px-[10px] focus:outline-none text-primaryText"
         placeholder="Type a message"
       />

@@ -1,8 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { io, Socket } from "socket.io-client";
 import { backendUrl, token } from "../helper/constants";
-import { updateChatLists } from "../helper/inValidateQuery";
 import { SendMessageProps } from "./type";
+import { addNewMessage } from "../helper/addNewMessage";
+import { updateChatLists } from "../helper/updateChatLists";
 
 const createSocket = () => {
   return io(backendUrl, {
@@ -13,24 +14,36 @@ const createSocket = () => {
 };
 
 export const useSocket = () => {
-  const updateChatList = updateChatLists();
+
+  const addNewMessageInstance = addNewMessage()
+  const updateChatListsInstance = updateChatLists()
 
   const { data: socket } = useQuery<Socket>({
     queryKey: ["socket"],
     queryFn: createSocket,
   });
 
+
   socket?.on("chatLists", (data) => {
-    updateChatList({
-      newValues: data.newChatList,
-    });
+
+    console.log(data)
+    updateChatListsInstance(data)
   });
 
-  const sendPrivateMessage = ({ receiverId, message }: SendMessageProps) => {
-    socket?.emit("privateMessage", { receiverId, message });
-  };
+
+  const markAsOnline = () => {
+    socket?.emit("online");
+  }
 
 
-  return { socket, sendPrivateMessage };
+  socket?.on("message", (data) => {
+    addNewMessageInstance(data)
+  });
+
+  const sendMessages = ({ receiverId, message, chatId }: SendMessageProps) => {
+    socket?.emit("message", { receiverId, message, chatId });
+  }
+
+  return { socket, markAsOnline, sendMessages };
 };
 

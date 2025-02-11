@@ -42,3 +42,20 @@
   align-items: center;
 }
 
+@keyframes typingDots {
+  0% { opacity: 0.2; transform: translateY(2px); }
+  50% { opacity: 1; transform: translateY(-2px); }
+  100% { opacity: 0.2; transform: translateY(2px); }
+}
+
+.dot-animation {
+  animation: typingDots 1s infinite ease-in-out;
+}
+
+.animation-delay-200 {
+  animation-delay: 0.2s;
+}
+
+.animation-delay-400 {
+  animation-delay: 0.4s;
+}

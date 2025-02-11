@@ -4,24 +4,15 @@ export type MessagesTypes = {
     senderId: string;
     text: string;
     mediaUrl: null;
-    mediaType: string;
-    status: string;
+    mediaType: "image" | "video" | "audio" | "document" | "none";
+    status: "sent" | "delivered" | "read";
     timestamp: string;
 }
 
 export type ChatsType =
     {
         _id: string;
-        lastMessage: {
-            _id: string;
-            chatId: string;
-            senderId: string;
-            text: string;
-            mediaUrl: null;
-            mediaType: string;
-            status: string;
-            timestamp: string;
-        } | undefined;
+        lastMessage: MessagesTypes | undefined;
         otherUser: UserType | undefined;
     }
 

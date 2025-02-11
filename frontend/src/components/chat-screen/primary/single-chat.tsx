@@ -5,7 +5,12 @@ import { timeAgo } from "../../../utils/helper/time-ago";
 import { useModifyQuery } from "../../../utils/helper/inValidateQuery";
 import ProfileSvg from "../../../ui/profilesvg";
 
-const SingleChat = ({ _id, lastMessage, otherUser }: ChatsType) => {
+const SingleChat = ({
+  _id,
+  lastMessage,
+  otherUser,
+  typingUsers,
+}: ChatsType & { typingUsers: any }) => {
   const { data: openedChat } = useOpenedChat();
 
   const modifyQuery = useModifyQuery();
@@ -23,6 +28,13 @@ const SingleChat = ({ _id, lastMessage, otherUser }: ChatsType) => {
   const lastMessageTime = lastMessage?.timestamp
     ? timeAgo(lastMessage.timestamp)
     : null;
+
+  const renderTypingIndicator = (chatId: string) => {
+    if (typingUsers[chatId]?.length > 0) {
+      return <p className="text-[12px] text-gray-500">is typing...</p>;
+    }
+    return lastMessage?.text;
+  };
 
   return (
     <div
@@ -53,8 +65,14 @@ const SingleChat = ({ _id, lastMessage, otherUser }: ChatsType) => {
           <Text fontWeight="semibold" className="line-clamp-1">
             {otherUser?.displayName || otherUser?.username}
           </Text>
-          <p className="text-[11px] line-clamp-1 opacity-55">
-            {lastMessage?.text}
+          <p
+            className={`text-[11px] line-clamp-1  ${
+              lastMessage?.status !== "read"
+                ? "text-white font-semibold"
+                : "opacity-55"
+            }`}
+          >
+            {renderTypingIndicator(lastMessage?.chatId || '')}
           </p>
         </div>
         <p className="text-[10px] opacity-55 pr-[5px]">{lastMessageTime}</p>
