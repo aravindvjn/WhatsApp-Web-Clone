@@ -10,7 +10,7 @@ function App() {
         <Toaster
           reverseOrder={false}
           toastOptions={{
-            duration: 4000,
+            duration: 3000,
           }}
         />
         <Routes />

@@ -11,23 +11,24 @@ import { useSocket } from "../../../utils/socket/socket";
 const ChatList = () => {
   const { data: chatLists } = useChatLists();
   const { data: notificaion } = useNotifications();
-
-  const [typingUsers, setTypingUsers] = useState<{
-    [chatId: string]: string[];
-  }>({});
+  const [readMessages, setReadMessages] = useState<string[]>([]);
+  const [typingUsers, setTypingUsers] = useState<string[]>([]);
 
   const { socket } = useSocket();
 
   const showCustomToast = () => {
-    toast.custom((t: any) => (
-      <Toast
-        message={notificaion?.message || ""}
-        profilePic={notificaion?.profilePic || ""}
-        username={notificaion?.username || ""}
-        displayName={notificaion?.displayName}
-        t={t}
-      />
-    ));
+    if (notificaion) {
+      toast.custom((t: any) => (
+        <Toast
+          openChat={{
+            _id: notificaion?._id || "",
+            otherUser: notificaion?.otherUser!,
+            lastMessage: notificaion?.lastMessage!,
+          }}
+          t={t}
+        />
+      ));
+    }
   };
 
   useEffect(() => {
@@ -37,15 +38,22 @@ const ChatList = () => {
   }, [notificaion]);
 
   useEffect(() => {
-    socket?.on("usersTyping", ({ chatId, typingUsers }) => {
-      setTypingUsers((prev) => ({
-        ...prev,
-        [chatId]: typingUsers,
-      }));
+    socket?.on("typing", ({ chatId }) => {
+      setTypingUsers((prev) => [...prev, chatId]);
+    });
+
+    socket?.on("stoppedTyping", ({ chatId }) => {
+      setTypingUsers((prev) => prev.filter((p) => p !== chatId));
+    });
+
+    socket?.on("messageRead", ({ messageId }) => {
+      setReadMessages((prev) => [...prev, messageId]);
     });
 
     return () => {
-      socket?.off("usersTyping");
+      socket?.off("typing");
+      socket?.off("stoppedTyping");
+      socket?.off("messageRead");
     };
   }, [socket]);
 
@@ -53,7 +61,12 @@ const ChatList = () => {
     <div className=" h-full overflow-y-scroll scrollbar-hide pb-[120px]">
       {chatLists?.length > 0 ? (
         chatLists.map((chat: ChatsType) => (
-          <SingleChat typingUsers={typingUsers} key={chat._id} {...chat} />
+          <SingleChat
+            typingUsers={typingUsers}
+            key={chat._id}
+            {...chat}
+            read={readMessages.includes(chat?.lastMessage?._id || "")}
+          />
         ))
       ) : (
         <p className="text-center pt-5 text-[10px]">No Chats yet.</p>

@@ -1,19 +1,19 @@
 import toast from "react-hot-toast";
 import ProfileSvg from "./profilesvg";
 import { motion } from "framer-motion";
-const Toast = ({
-  profilePic,
-  displayName,
-  username,
-  message,
-  t,
-}: {
-  profilePic: string;
-  displayName?: string;
-  username: string;
-  message: string;
-  t: any;
-}) => {
+import { useModifyQuery } from "../utils/helper/inValidateQuery";
+import { MessagesTypes } from "../components/chat-screen/types";
+import { OpenedChatType } from "../hooks/useOpenedChat";
+const Toast = ({ openChat, t }: { openChat: OpenedChatType & { lastMessage:MessagesTypes}; t: any }) => {
+  const modifyQuery = useModifyQuery();
+  
+  const handleOpenChat = () => {
+    modifyQuery({
+      key: "opened-chat",
+      newValues: openChat,
+      
+    });
+  };
   return (
     <motion.div
       initial={{ translateY: "-100%" }}
@@ -22,20 +22,20 @@ const Toast = ({
         t.visible ? "animate-enter" : "animate-leave"
       } max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5`}
     >
-      <div className="flex-1 w-0 p-4">
+      <div onClick={handleOpenChat} className="flex-1 w-0 p-4">
         <div className="flex items-start">
           <div className="flex-shrink-0 pt-0.5">
-            {profilePic ? (
-              <img className="h-10 w-10 rounded-full" src={profilePic} alt="" />
+            {openChat?.otherUser?.profilePic ? (
+              <img className="h-10 w-10 rounded-full" src={openChat?.otherUser?.profilePic} alt="" />
             ) : (
               <ProfileSvg size={40} />
             )}
           </div>
           <div className="ml-3 flex-1">
             <p className="text-sm font-medium text-gray-900">
-              {displayName || username}
+              {/* {openChat?.otherUser.displayName || openChat?.otherUser.username} */}
             </p>
-            <p className="mt-1 line-clamp-2 text-sm text-gray-500">{message}</p>
+            <p className="mt-1 line-clamp-2 text-sm text-gray-500">{openChat?.lastMessage.text}</p>
           </div>
         </div>
       </div>

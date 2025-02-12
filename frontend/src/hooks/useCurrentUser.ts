@@ -8,6 +8,7 @@ export const useCurrentUser = () => {
         queryKey: ["user"],
         queryFn: getCurrentUser,
         refetchOnWindowFocus: false,
+        
     });
 }
 

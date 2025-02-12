@@ -33,3 +33,12 @@ export const useNewMessage = () => {
         initialData: queryClient.getQueryData(["newMessage"]),
     });
 };
+
+export const useDeliveredMessageId = () => {
+    const queryClient = useQueryClient();
+    return useQuery<string[]>({
+        queryKey: ["deliveredMessagesId"],
+        queryFn: () => queryClient.getQueryData(["deliveredMessagesId"]) || [],
+        initialData: [],
+    });
+};

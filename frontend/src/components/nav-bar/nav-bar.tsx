@@ -12,7 +12,7 @@ export type PageType =
   | "settings"
   | "profile"
   | "channel"
-  | "community";
+  | "calls";
 
 const NavBar = ({ setPage, page }: NavBarProps) => {
 

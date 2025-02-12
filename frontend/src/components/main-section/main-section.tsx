@@ -1,7 +1,10 @@
+import CallScreen from "../call-screen/call-screen";
+import ChannelScreen from "../channel-screen/channel-screen";
 import ChatMainScreen from "../chat-screen/primary/chat-main-screen";
 
 import type { PageType } from "../nav-bar/nav-bar";
 import ProfileScreen from "../profile-screen/profile-screen";
+import StatusPage from "../status-page/status-page";
 
 const MainSection = ({ page }: { page: PageType }) => {
   let activePage;
@@ -12,6 +15,15 @@ const MainSection = ({ page }: { page: PageType }) => {
       break;
     case "profile":
       activePage = <ProfileScreen />;
+      break;
+    case "channel":
+      activePage = <ChannelScreen />;
+      break;
+    case "calls":
+      activePage = <CallScreen />;
+      break;
+    case "status":
+      activePage = <StatusPage />;
       break;
     default:
       activePage = <div>Unknown Page</div>;

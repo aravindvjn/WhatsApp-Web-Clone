@@ -6,7 +6,15 @@ import { addNewMessage } from "../../../utils/helper/addNewMessage";
 import { updateChatLists } from "../../../utils/helper/updateChatLists";
 import { MessagesTypes } from "../types";
 
-const Footer = ({ chatId, otherUser }: { chatId: string; otherUser: any }) => {
+const Footer = ({
+  chatId,
+  otherUser,
+  onlineUsers,
+}: {
+  chatId: string;
+  otherUser: any;
+  onlineUsers: string[];
+}) => {
   const { sendMessages, socket } = useSocket();
 
   const [isUserTyping, setIsUserTyping] = useState<boolean>(false);
@@ -25,23 +33,24 @@ const Footer = ({ chatId, otherUser }: { chatId: string; otherUser: any }) => {
         chatId,
         receiverId: otherUser._id,
       });
-      const lastMessage: MessagesTypes = {
-        _id: new Date().getMilliseconds().toString(),
-        chatId: chatId,
-        senderId: "",
-        text: message,
-        mediaUrl: null,
-        mediaType: "none",
-        status: "sent",
-        timestamp: new Date().toLocaleString(),
-      };
-      addNewMessageInstance(lastMessage);
+      // const lastMessage: MessagesTypes = {
+      //   _id: new Date().getMilliseconds().toString(),
+      //   chatId: chatId,
+      //   senderId: "",
+      //   receiverId: otherUser._id,
+      //   text: message,
+      //   mediaUrl: null,
+      //   mediaType: "none",
+      //   status: onlineUsers.includes(otherUser._id) ? "delivered" : "sent",
+      //   timestamp: new Date().toLocaleString(),
+      // };
+      // addNewMessageInstance(lastMessage);
 
-      updateChatListsInstance({
-        _id: chatId,
-        lastMessage,
-        otherUser,
-      });
+      // updateChatListsInstance({
+      //   _id: chatId,
+      //   lastMessage,
+      //   otherUser,
+      // });
 
       setMessage("");
     }

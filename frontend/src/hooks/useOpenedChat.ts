@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
-type OpenedChatType = {
+export type OpenedChatType = {
     _id: string;
     otherUser: {
         displayName: string;

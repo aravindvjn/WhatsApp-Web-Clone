@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { IoAdd, IoDocument, IoPerson } from "react-icons/io5";
 import { AnimatePresence, motion } from "framer-motion";
-import { IoIosPhotos, IoMdPhotos } from "react-icons/io";
+import {  IoMdPhotos } from "react-icons/io";
 import { FaCamera } from "react-icons/fa";
 import { BiPoll } from "react-icons/bi";
 import { RiEmojiStickerFill } from "react-icons/ri";

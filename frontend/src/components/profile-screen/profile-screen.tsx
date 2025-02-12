@@ -1,9 +1,8 @@
-import React from "react";
+
 import { useCurrentUser } from "../../hooks/useCurrentUser";
 import Text from "../../ui/text";
-import ProfileSvg from "../../ui/profilesvg";
-import { users } from "../../data/user";
 import EditInput from "./edit-input";
+import ProfilePic from "./profile-pic";
 
 const ProfileScreen = () => {
   const { data: user } = useCurrentUser();
@@ -12,14 +11,17 @@ const ProfileScreen = () => {
     {
       label: "Your name",
       value: user?.displayName || "Meta User",
+      name: "displayName",
     },
     {
       label: "Your username",
       value: user?.username || "unavailable",
+      name: "username",
     },
     {
       label: "About",
       value: user?.status || "",
+      name: "status",
     },
   ];
 
@@ -28,21 +30,11 @@ const ProfileScreen = () => {
       <Text type="h4" fontWeight="bold">
         Profile
       </Text>
-      <div className="w-[200px] mt-5  rounded-full aspect-square overflow-hidden mx-auto">
-        {user?.profilePic ? (
-          <img
-            src={
-                user?.profilePic
-            }
-            alt="profile picture"
-          />
-        ) : (
-          <ProfileSvg size={200} />
-        )}
-      </div>
+      <ProfilePic profilePic={user?.profilePic || ""} />
       <div>
         {details?.map((detail) => (
           <EditInput
+            name={detail.name}
             key={detail.label}
             label={detail.label}
             value={detail.value}

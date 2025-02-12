@@ -1,5 +1,5 @@
 import { IoChatboxEllipses, IoPersonCircleSharp } from "react-icons/io5";
-import { IoIosPeople } from "react-icons/io";
+import { IoMdCall } from "react-icons/io";
 import { RiChatSmileAiLine } from "react-icons/ri";
 import { GrEmptyCircle } from "react-icons/gr";
 import { MdOutlineSettings } from "react-icons/md";
@@ -23,8 +23,8 @@ export const options: {
       icon: <RiChatSmileAiLine size={22} />,
     },
     {
-      name: "community",
-      icon: <IoIosPeople className="translate-y-[1px]" size={22} />,
+      name: "calls",
+      icon: <IoMdCall  className="translate-y-[1px]" size={22} />,
     },
   ];
   

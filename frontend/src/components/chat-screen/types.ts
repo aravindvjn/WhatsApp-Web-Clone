@@ -2,6 +2,7 @@ export type MessagesTypes = {
     _id: string;
     chatId: string;
     senderId: string;
+    receiverId: string;
     text: string;
     mediaUrl: null;
     mediaType: "image" | "video" | "audio" | "document" | "none";

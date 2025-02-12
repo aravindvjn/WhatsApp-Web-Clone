@@ -23,12 +23,11 @@ export const updateChatLists = () => {
             if (openedChat?._id === newChatList._id) {
                 queryClient.setQueryData(["notification"], null);
             } else {
-                queryClient.setQueryData(["notification"], {
-                    message: newChatList.lastMessage?.text,
-                    profilePic: newChatList.otherUser?.profilePic,
-                    displayName: newChatList.otherUser?.displayName,
-                    username: newChatList.otherUser?.username,
-                });
+                queryClient.setQueryData(["notification"],
+                    newChatList);
+                setTimeout(() => {
+                    queryClient.setQueryData(["notification"], null);
+                }, 3000)
             }
 
             queryClient.invalidateQueries<any>(["notification"]);
