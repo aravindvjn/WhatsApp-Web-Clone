@@ -10,7 +10,7 @@ export const socketConnection = (socket) => {
 
   global.chatSocket = socket;
   socket.join(user.id);
-  
+
   socket.on("online", async () => {
     onlineUsers.set(userId, socket.id);
 
@@ -49,7 +49,7 @@ export const socketConnection = (socket) => {
       if (sendSocketId) {
         const otherUser = await User.findById(receiverId);
 
-        io.to(receiverId).emit("message", newMessage.message);
+        io.to(receiverId).to(userId).emit("message", newMessage.message);
         const newChatList = {
           _id: newMessage.message.chatId,
           lastMessage: newMessage.message,
@@ -64,7 +64,7 @@ export const socketConnection = (socket) => {
             : null,
         };
 
-        io.to(receiverId).emit("chatLists", newChatList);
+        io.to(receiverId).to(userId).emit("chatLists", newChatList);
       }
     } catch (error) {
       console.error("Error sending message:", error);
@@ -72,41 +72,27 @@ export const socketConnection = (socket) => {
   });
 
   socket.on("typing", ({ receiverId, chatId }) => {
-
     io.to(receiverId).emit("typing", {
       chatId,
     });
   });
 
   socket.on("stoppedTyping", ({ chatId, receiverId }) => {
-      io.to(receiverId).emit("stoppedTyping", {
-        chatId,
-      });
+    io.to(receiverId).emit("stoppedTyping", {
+      chatId,
+    });
   });
 
-  socket.on("messageDelivered", ({ messageId }) => {
+  socket.on("messageRead", async ({ chatId, senderId,messageId }) => {
     try {
-      const message = Message.findByIdAndUpdate(messageId, {
-        status: "delivered",
-      });
-      if (!message) {
-        return console.error("Message not found to mark as delivered");
-      }
-      io.to(message.senderId).emit("messageDelivered", messageId);
-    } catch (error) {
-      console.error("Error in marking message as delivered", error);
-    }
-  });
+      await Message.updateMany(
+        { chatId, status: { $ne: "read" } },
+        { $set: { status: "read" } }
+      );
 
-  socket.on("messageRead", ({ messageId }) => {
-    try {
-      const message = Message.findByIdAndUpdate(messageId, {
-        status: "read",
-      });
-
-      io.to(message.senderId).emit("messageRead", messageId);
+      io.to(senderId).emit("messageRead", { chatId,messageId });
     } catch (error) {
-      console.error("Error in marking message as delivered", error);
+      console.error("Error in marking messages as read", error);
     }
   });
 
