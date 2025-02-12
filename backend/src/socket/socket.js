@@ -24,7 +24,6 @@ export const socketConnection = (socket) => {
     }
 
     io.emit("onlineUsers", Array.from(onlineUsers.keys()));
-    io.emit("online");
   });
 
   socket.on("message", async ({ receiverId, message, chatId }) => {
@@ -33,7 +32,7 @@ export const socketConnection = (socket) => {
         return socket.emit("error", "Invalid message or recipient.");
       }
       const status = Array.from(onlineUsers.keys()).includes(receiverId)
-        ? `delivered`
+        ? "delivered"
         : "sent";
       const sendSocketId = onlineUsers.get(receiverId);
       const newMessage = await saveMessageToDB({
@@ -49,7 +48,8 @@ export const socketConnection = (socket) => {
       if (sendSocketId) {
         const otherUser = await User.findById(receiverId);
 
-        io.to(receiverId).to(userId).emit("message", newMessage.message);
+        io.to(receiverId).emit("message", newMessage.message);
+        io.to(userId).emit("message", newMessage.message);
         const newChatList = {
           _id: newMessage.message.chatId,
           lastMessage: newMessage.message,
@@ -64,7 +64,8 @@ export const socketConnection = (socket) => {
             : null,
         };
 
-        io.to(receiverId).to(userId).emit("chatLists", newChatList);
+        io.to(receiverId).emit("chatLists", newChatList);
+        io.to(userId).emit("chatLists", newChatList);
       }
     } catch (error) {
       console.error("Error sending message:", error);
@@ -85,21 +86,25 @@ export const socketConnection = (socket) => {
 
   socket.on("messageRead", async ({ chatId, senderId,messageId }) => {
     try {
+      console.log("Message received")
       await Message.updateMany(
         { chatId, status: { $ne: "read" } },
         { $set: { status: "read" } }
       );
 
       io.to(senderId).emit("messageRead", { chatId,messageId });
+      console.log("Marked as read as emitted")
     } catch (error) {
       console.error("Error in marking messages as read", error);
     }
   });
 
   socket.on("disconnect", () => {
-    console.log(`User Disconnected: ${socket.id}`);
-    onlineUsers.delete(userId);
-
-    io.emit("onlineUsers", Array.from(onlineUsers.keys()));
+    if (onlineUsers.has(userId)) {
+      console.log(`User Disconnected: ${userId}`);
+      onlineUsers.delete(userId);
+      io.emit("onlineUsers", Array.from(onlineUsers.keys()));
+    }
   });
+  
 };

@@ -69,6 +69,22 @@ export const getMessages = async (req, res) => {
       .limit(24)
       .sort({ timestamp: -1 });
 
+    const unReadMessagesIds = [];
+
+    messages.map((message) => {
+      if (message.status !== "read" && message.senderId.toString() === req.user.id.toString()) {
+        message.status = "read";
+        unReadMessagesIds.push(message._id);
+      }
+    });
+
+    if (unReadMessagesIds.length > 0) {
+      await Message.updateMany(
+        { _id: { $in: unReadMessagesIds } },
+        { $set: { status: "read" } }
+      );
+    }
+
     res.status(200).json(messages.reverse());
   } catch (error) {
     console.error("Error fetching messages:", error);
