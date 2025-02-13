@@ -8,7 +8,11 @@ const statusSchema = new mongoose.Schema(
       required: true,
     },
     mediaUrl: { type: String, required: true },
-    type: { type: String, enum: ["image", "video", "text"], required: true },
+    type: {
+      type: String,
+      enum: ["image/jpeg", "image/png", "image/gif", "video/mp4", "video/mkv","text"],
+      required: true,
+    },
     text: { type: String, default: "" },
     views: [
       {

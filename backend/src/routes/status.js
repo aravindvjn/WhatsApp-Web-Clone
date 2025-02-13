@@ -1,12 +1,13 @@
-import {Router} from 'express';
-import { createStatus, getStatus, updateViews } from '../controllers/status.js';
+import { Router } from "express";
+import { createStatus, getStatus, updateViews } from "../controllers/status.js";
+import { upload } from "../middlewares/upload-media.js";
 
-const router = Router()
+const router = Router();
 
-router.get('/',getStatus);
+router.get("/", getStatus);
 
-router.post('/',createStatus)
+router.post("/", upload.single("media"), createStatus);
 
-router.put('/',updateViews)
+router.put("/", updateViews);
 
-export default router
+export default router;
