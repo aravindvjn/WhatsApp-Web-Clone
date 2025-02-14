@@ -16,6 +16,7 @@ const AuthForm = () => {
     isLogin,
   });
 
+  // useAuth hook to perform login or signup operation
   const { mutate: login, isPending, error } = useAuth();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,6 +37,7 @@ const AuthForm = () => {
       className="center text-primaryText flex-col gap-[12px] px-[20px] w-full max-w-[400px]"
     >
       {error && <p className="text-red-500 text-[12px]">{error.message}</p>}
+
       {!isLogin && (
         <input
           className="bg-secondary w-full focus:outline-none px-3 py-1.5 rounded placeholder:text-secondaryText"
@@ -46,6 +48,7 @@ const AuthForm = () => {
           placeholder="Username"
         />
       )}
+
       <input
         className="bg-secondary w-full focus:outline-none px-3 py-1.5 rounded placeholder:text-secondaryText"
         onChange={handleInputChange}
@@ -68,6 +71,7 @@ const AuthForm = () => {
       >
         {isPending ? "Logging in..." : "Login"}
       </button>
+
       <button
         type="button"
         className="w-fit self-end"

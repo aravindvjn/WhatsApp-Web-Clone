@@ -14,9 +14,14 @@ const SingleChat = ({
   typingUsers,
   read,
 }: ChatsType & { typingUsers: any; read: boolean }) => {
+
+  //Get opened chat
   const { data: openedChat } = useOpenedChat();
+
+  //Use modify query to update opened chat
   const modifyQuery = useModifyQuery();
 
+  //Handle open chat when clicked on a chat
   const handleOpenChat = () => {
     modifyQuery({
       key: "opened-chat",
@@ -27,10 +32,12 @@ const SingleChat = ({
     });
   };
 
+  //formating last message timestamp
   const lastMessageTime = lastMessage?.timestamp
     ? timeAgo(lastMessage.timestamp)
     : null;
 
+  //render typing indicator when user is typing in a chat
   const renderTypingIndicator = (chatId: string) => {
     if (typingUsers.includes(chatId)) {
       return <p className="text-[12px] text-green  font-normal">typing...</p>;
@@ -38,6 +45,7 @@ const SingleChat = ({
     return lastMessage?.text;
   };
 
+  //Remove typing user from typingUsers when last message is arrives
   useEffect(() => {
     typingUsers = typingUsers.filter(
       (chatid: string) => chatid !== lastMessage?.chatId
@@ -51,11 +59,13 @@ const SingleChat = ({
         openedChat?._id === _id ? "bg-secondary" : ""
       }`}
     >
+
       <div>
         <ProfilePic profilePic={otherUser?.profilePic || ""} size={42} />
       </div>
 
       <div className="flex py-[15px] w-full border-b border-white/10 gap-[10px] justify-between">
+
         <div>
           <Text fontWeight="semibold" className="line-clamp-1">
             {otherUser?.displayName || otherUser?.username}
@@ -70,8 +80,10 @@ const SingleChat = ({
             {renderTypingIndicator(lastMessage?.chatId || "")}
           </p>
         </div>
+
         <p className="text-[10px] opacity-55 pr-[5px]">{lastMessageTime}</p>
       </div>
+      
     </div>
   );
 };

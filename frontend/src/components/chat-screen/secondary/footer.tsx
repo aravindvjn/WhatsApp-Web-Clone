@@ -2,14 +2,10 @@ import React, { useState } from "react";
 import { FaMicrophone } from "react-icons/fa";
 import { useSocket } from "../../../utils/socket/socket";
 import MoreChatOpions from "./more-chatoptions";
-import { addNewMessage } from "../../../utils/helper/addNewMessage";
-import { updateChatLists } from "../../../utils/helper/updateChatLists";
-import { MessagesTypes } from "../types";
 
 const Footer = ({
   chatId,
   otherUser,
-  onlineUsers,
 }: {
   chatId: string;
   otherUser: any;
@@ -21,9 +17,6 @@ const Footer = ({
 
   const [message, setMessage] = useState<string>("");
 
-  const addNewMessageInstance = addNewMessage();
-  const updateChatListsInstance = updateChatLists();
-
   const sendMessageHandler = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -33,24 +26,6 @@ const Footer = ({
         chatId,
         receiverId: otherUser._id,
       });
-      // const lastMessage: MessagesTypes = {
-      //   _id: new Date().getMilliseconds().toString(),
-      //   chatId: chatId,
-      //   senderId: "",
-      //   receiverId: otherUser._id,
-      //   text: message,
-      //   mediaUrl: null,
-      //   mediaType: "none",
-      //   status: onlineUsers.includes(otherUser._id) ? "delivered" : "sent",
-      //   timestamp: new Date().toLocaleString(),
-      // };
-      // addNewMessageInstance(lastMessage);
-
-      // updateChatListsInstance({
-      //   _id: chatId,
-      //   lastMessage,
-      //   otherUser,
-      // });
 
       setMessage("");
     }
@@ -78,15 +53,18 @@ const Footer = ({
       className="absolute bottom-0 w-full right-0 p-[10px] bg-secondary text-secondaryText flex items-center min-h-[60px]"
     >
       <MoreChatOpions />
+
       <input
         value={message}
         onChange={onChangeHandler}
         className="line-clamp-4 h-[40px] bg-blue-200/20  flex items-center rounded-md w-full px-[10px] focus:outline-none text-primaryText"
         placeholder="Type a message"
       />
+
       <button type="button" className="center w-[50px]">
         <FaMicrophone size={20} />
       </button>
+      
     </form>
   );
 };

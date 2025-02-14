@@ -15,6 +15,7 @@ const MoreChatOpions = () => {
 
   return (
     <div className="relative w-[50px]">
+
       <motion.button
         onClick={() => setShowOptions((prev) => !prev)}
         type="button"
@@ -38,6 +39,7 @@ const MoreChatOpions = () => {
             style={{ transformOrigin: "left bottom" }}
             className="absolute bottom-[60px] text-primaryText left-[10px] bg-fourthColor  rounded-lg text-[14px] w-[200px] overflow-hidden shadow shadow-black/30"
           >
+
             <ul className="flex flex-col">
               {options.map((option, index) => (
                 <li
@@ -49,9 +51,11 @@ const MoreChatOpions = () => {
                 </li>
               ))}
             </ul>
+
           </motion.div>
         )}
       </AnimatePresence>
+      
     </div>
   );
 };

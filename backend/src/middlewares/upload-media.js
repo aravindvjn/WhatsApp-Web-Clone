@@ -1,14 +1,14 @@
 import fs from "fs";
 import multer from "multer";
 
-const uploadDir = "uploads/";
+const uploadDir = "src/uploads/";
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "uploads/");
+    cb(null, "src/uploads/");
   },
   filename: (req, file, cb) => {
     const filename = file.originalname.replace(/\s+/g, "_"); 

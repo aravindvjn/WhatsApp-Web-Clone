@@ -6,15 +6,12 @@ export const createStatus = async (req, res) => {
     if (!req.file) {
       return res.status(400).json({ message: "No file uploaded" });
     }
-
     const { text } = req.body;
     const type = req.file.mimetype;
-    const mediaUrl = req.file.path;
-    console.log("media",mediaUrl, type);
+    let mediaUrl = `uploads${req.file.path.split("uploads")[1]}`;
     if (!mediaUrl || !type) {
       return res.status(400).json({ message: "Invalid Request." });
     }
-    console.log("media",mediaUrl, type);
     const status = new Status({
       mediaUrl,
       type,
@@ -76,9 +73,7 @@ export const getStatus = async (req, res) => {
       "participants"
     );
 
-    const chatUserIds = chats.flatMap((chat) =>
-      chat.participants.filter((id) => id.toString() !== userId)
-    );
+    const chatUserIds = chats.flatMap((chat) => chat.participants);
 
     const statuses = await Status.find({
       userId: { $in: chatUserIds },
@@ -86,7 +81,19 @@ export const getStatus = async (req, res) => {
       .populate("userId", "_id displayName profilePic username")
       .sort({ createdAt: -1 });
 
-    res.status(200).json(statuses || []);
+    const sortedStatuses = Object.entries(
+      statuses.reduce((accum, status) => {
+        const userId = status.userId._id;
+
+        if (!accum[userId]) {
+          accum[userId] = [];
+        }
+
+        accum[userId].push(status);
+        return accum;
+      }, {})
+    ).map(([userId, statuses]) => ({ userId, statuses }));
+    res.status(200).json(sortedStatuses || []);
   } catch (error) {
     console.error("Error in getting statuses:", error);
     res.status(500).json({ message: "Internal Server Error" });

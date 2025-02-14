@@ -24,7 +24,9 @@ const ChatSecondaryScreen = () => {
 
   return (
     <div className="h-dvh relative w-full">
+
       <Header onlineUsers={onlineUsers || []} />
+
       <Chats
         isTyping={isTyping}
         setIsTyping={setIsTyping}
@@ -34,11 +36,13 @@ const ChatSecondaryScreen = () => {
         receiverId={currentUser?._id || ""}
         onlineUsers={onlineUsers || []}
       />
+
       <Footer
         onlineUsers={onlineUsers || []}
         chatId={openedChat?._id || ""}
         otherUser={openedChat?.otherUser}
       />
+      
     </div>
   );
 };

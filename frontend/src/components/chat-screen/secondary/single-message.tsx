@@ -54,6 +54,7 @@ const SingleMessge = ({
         senderId: messages.senderId,
       });
     }
+    
     socket?.on("messageRead", (data) => {
       console.log(data);
       console.log(data.messageId === messages._id);
