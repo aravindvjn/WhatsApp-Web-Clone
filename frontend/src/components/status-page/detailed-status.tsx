@@ -18,7 +18,7 @@ const DetailedStatus = ({
   statuses: StatusType[];
   setShowStatus: Dispatch<SetStateAction<boolean>>;
 }) => {
-  
+
   const [statusIndex, setStatusIndex] = useState(0);
   const [statusProgress, setStatusProgress] = useState(0);
   const progressInterval = useRef<NodeJS.Timeout | null>(null);
