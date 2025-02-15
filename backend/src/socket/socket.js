@@ -84,21 +84,34 @@ export const socketConnection = (socket) => {
     });
   });
 
-  socket.on("messageRead", async ({ chatId, senderId,messageId }) => {
+  socket.on("messageRead", async ({ chatId, senderId, messageId }) => {
     try {
-      console.log("Message received")
+      console.log("Message received");
       await Message.updateMany(
         { chatId, status: { $ne: "read" } },
         { $set: { status: "read" } }
       );
 
-      io.to(senderId).emit("messageRead", { chatId,messageId });
-      console.log("Marked as read as emitted")
+      io.to(senderId).emit("messageRead", { chatId, messageId });
+      console.log("Marked as read as emitted");
     } catch (error) {
       console.error("Error in marking messages as read", error);
     }
   });
 
+  // => Video Call Handlers
+  socket.on("videoCallRequest", ({ receiverId, peerId }) => {
+    console.log("Video call request")
+    io.to(receiverId).emit("videoCallRequest", { peerId, senderId: userId });
+  });
+
+  socket.on("videoCallAccept", ({ peerId, senderId }) => {
+    const receiverId = userId;
+    io.to(receiverId).emit("videoCallAccept", { peerId, senderId });
+    io.to(senderId).emit("videoCallAccept", { peerId, senderId });
+  });
+
+  // => Disconnection
   socket.on("disconnect", () => {
     if (onlineUsers.has(userId)) {
       console.log(`User Disconnected: ${userId}`);
@@ -106,5 +119,4 @@ export const socketConnection = (socket) => {
       io.emit("onlineUsers", Array.from(onlineUsers.keys()));
     }
   });
-  
 };
