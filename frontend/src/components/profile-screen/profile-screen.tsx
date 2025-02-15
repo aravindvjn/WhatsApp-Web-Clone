@@ -1,7 +1,7 @@
-
 import { useCurrentUser } from "../../hooks/useCurrentUser";
 import Text from "../../ui/text";
 import EditInput from "./edit-input";
+import Logout from "./logout";
 import ProfilePic from "./profile-pic";
 
 const ProfileScreen = () => {
@@ -41,6 +41,7 @@ const ProfileScreen = () => {
           />
         ))}
       </div>
+      <Logout />
     </div>
   );
 };

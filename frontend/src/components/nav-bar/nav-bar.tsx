@@ -12,7 +12,8 @@ export type PageType =
   | "settings"
   | "profile"
   | "channel"
-  | "calls";
+  | "calls"
+  | "add-friend"
 
 const NavBar = ({ setPage, page }: NavBarProps) => {
 

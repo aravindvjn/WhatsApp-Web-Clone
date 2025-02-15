@@ -13,7 +13,10 @@ export const createStatus = async (file: File | null,
   try {
 
     if (!file) {
-      throw new Error("Media file is required for image or video status.");
+      return {
+        message: "Media file is required for image or video status.",
+        success: false,
+      };
     }
 
     formData.append('media', file);

@@ -10,6 +10,7 @@ const HomePage = () => {
   const [status, setStatus] = useState<boolean>(false);
   const { socket } = useSocket();
   const { updateOnlineUsers } = useOnlineUsers();
+
   useEffect(() => {
     if (!status && socket) {
       socket?.emit("online");
@@ -24,7 +25,7 @@ const HomePage = () => {
   return (
     <div className=" flex h-dvh overflow-hidden">
       <NavBar setPage={setPage} page={page} />
-      <MainSection page={page} />
+      <MainSection page={page} setPage={setPage} />
       <SecondarySection page={page} />
     </div>
   );

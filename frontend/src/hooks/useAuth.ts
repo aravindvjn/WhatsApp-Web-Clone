@@ -9,7 +9,7 @@ export type LoginType = {
 }
 
 const authFn = async (input: InputType): Promise<LoginType> => {
-  console.log(input)
+  
   const response = await fetch(`${backendUrl}/auth/${input.isLogin ? "signin" : "signup"}`, {
     method: "POST",
     headers: {

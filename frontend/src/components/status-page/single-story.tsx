@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import ProfilePic from "../helper-components/profile-picture";
 import { StatusType } from "../../hooks/useStatus";
 import formatTimestamp from "../../utils/helper/formateTimeStamp";
-import { backendUrl } from "../../utils/helper/constants";
+
 import DetailedStatus from "./detailed-status";
 import { getImageUrl } from "../../utils/helper/getImageUrl";
 
@@ -20,7 +20,6 @@ const SingleStory = ({
     setShowStatus((prev) => !prev);
   };
 
-
   return (
     <div
       onClick={handleShowStatus}
@@ -35,6 +34,7 @@ const SingleStory = ({
           size={36}
         />
       </div>
+
       <div className="border-b pr-[12px] border-border w-full py-2">
         <p className="text-primaryText text-[14px]">
           {userId.displayName || userId.username}
@@ -43,6 +43,7 @@ const SingleStory = ({
           {formatTimestamp(createdAt)}
         </p>
       </div>
+      
     </div>
   );
 };

@@ -23,8 +23,10 @@ const StatusPreview = ({
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [croppedImage, setCroppedImage] = useState<string | null>(null);
+
   const [file, setFile] = useState<File | null>(null);
 
+  //actions to perform the status submission
   const [state, action, isPending] = useActionState(
     createStatus.bind(null, file),
     {
@@ -33,15 +35,18 @@ const StatusPreview = ({
     }
   );
 
+  //Handling croping and zooming
   const onCropComplete = async (
     _croppedArea: Area,
     croppedAreaPixels: Area
   ) => {
+
     try {
       const croppedImgBlob = (await getCroppedImg(
         image,
         croppedAreaPixels
       )) as Blob;
+
       const croppedImgUrl = URL.createObjectURL(croppedImgBlob);
       setCroppedImage(croppedImgUrl);
     } catch (error) {
@@ -60,6 +65,7 @@ const StatusPreview = ({
     }
   };
 
+  //resetting everything after successful response
   useEffect(() => {
     if (state.success) {
       setImage("");
@@ -74,6 +80,8 @@ const StatusPreview = ({
   return createPortal(
     <div className="fixed inset-0 flex flex-col items-center z-20 bg-black justify-center bg-primary w-full h-dvh">
       <div className="max-w-md bg-white p-4 rounded-lg shadow-lg center">
+
+
         <Cropper
           style={{
             containerStyle: {
@@ -93,6 +101,8 @@ const StatusPreview = ({
           onZoomChange={setZoom}
           onCropComplete={onCropComplete}
         />
+
+
         <form
           action={action}
           className="w-full flex-col mt-4 absolute center bottom-[25px] gap-2"
@@ -107,6 +117,8 @@ const StatusPreview = ({
               <p>Sending...</p>
             </div>
           )}
+
+
           <div className="flex center w-full gap-2">
             <button
               type="button"
@@ -130,7 +142,11 @@ const StatusPreview = ({
               {file ? <BsFillSendFill /> : <MdNavigateNext size={33} />}
             </button>
           </div>
+
+
         </form>
+
+
       </div>
     </div>,
     document.body

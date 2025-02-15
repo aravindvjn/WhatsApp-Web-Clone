@@ -4,8 +4,8 @@ const SingleChannel = () => {
   return (
     <div className="flex pl-3 gap-3 items-center">
       <ProfilePic profilePic="" size={36} />
-      <div className="flex justify-between gap-3 pr-3 items-center border-b border-border">
-        <div className=" pr-[12px]  w-full py-2 ">
+      <div className="flex w-full justify-between gap-3 pr-3 items-center border-b border-border">
+        <div className="pr-[12px]  w-full py-2 ">
           <p className="text-primaryText line-clamp-1 text-[14px]">
             Sun News
           </p>

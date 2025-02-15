@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import useAuth from "../../hooks/useAuth";
+import Footer from "./footer";
 
 export type InputType = {
   email: string;
@@ -72,13 +73,7 @@ const AuthForm = () => {
         {isPending ? "Logging in..." : "Login"}
       </button>
 
-      <button
-        type="button"
-        className="w-fit self-end"
-        onClick={() => setIsLogin((prev) => !prev)}
-      >
-        {isLogin ? "Signup" : "Signin"}
-      </button>
+      <Footer setIsLogin={setIsLogin} isLogin={isLogin} />
     </form>
   );
 };

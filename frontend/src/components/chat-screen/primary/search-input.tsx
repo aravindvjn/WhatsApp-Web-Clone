@@ -2,8 +2,8 @@ import { useRef, useState } from "react";
 import { BiArrowBack, BiSearch } from "react-icons/bi";
 
 const SearchInput = () => {
-  const [input, setInput] = useState<string>();
 
+  const [input, setInput] = useState<string>();
   const inputRef = useRef(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

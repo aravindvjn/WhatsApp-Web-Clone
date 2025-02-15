@@ -6,6 +6,7 @@ import { addNewMessage } from "../helper/addNewMessage";
 import { updateChatLists } from "../helper/updateChatLists";
 import { updateDeliveredMessagesId } from "../helper/updateMsgIds";
 
+
 export const useSocket = () => {
   const [socket, setSocket] = useState<Socket | null>(null);
   const updateMsgIds = updateDeliveredMessagesId();
@@ -35,6 +36,8 @@ export const useSocket = () => {
   const sendMessages = ({ receiverId, message, chatId }: SendMessageProps) => {
     socket?.emit("message", { receiverId, message, chatId });
   };
+
+
 
   return { socket, sendMessages };
 };

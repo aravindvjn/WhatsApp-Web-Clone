@@ -8,6 +8,7 @@ import { useOpenedChat } from "../../../hooks/useOpenedChat";
 import NoOpenChats from "./no-openchat";
 import { useState } from "react";
 import { useOnlineUsers } from "../../../hooks/useOnlineUsers";
+import { generateRoomId } from "../../../utils/helper/generateVideoCallRoomId";
 
 const ChatSecondaryScreen = () => {
   const { data: currentUser } = useCurrentUser();
@@ -24,8 +25,10 @@ const ChatSecondaryScreen = () => {
 
   return (
     <div className="h-dvh relative w-full">
-
-      <Header onlineUsers={onlineUsers || []} />
+      <Header
+        roomId={generateRoomId(openedChat.otherUser._id, currentUser?._id || "")}
+        onlineUsers={onlineUsers || []}
+      />
 
       <Chats
         isTyping={isTyping}
@@ -42,7 +45,6 @@ const ChatSecondaryScreen = () => {
         chatId={openedChat?._id || ""}
         otherUser={openedChat?.otherUser}
       />
-      
     </div>
   );
 };

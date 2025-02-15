@@ -1,4 +1,4 @@
-import React, {
+import {
   Dispatch,
   SetStateAction,
   useEffect,
@@ -23,9 +23,11 @@ const DetailedStatus = ({
   const [statusProgress, setStatusProgress] = useState(0);
   const progressInterval = useRef<NodeJS.Timeout | null>(null);
   const length = statuses.length || 0;
+
   const buttonClasses =
     "w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm center";
 
+  //Handle the status change
   const handleNextnPrevious = (next: boolean) => {
     setStatusIndex((prev) => {
       const newIndex = next ? prev + 1 : prev - 1;
@@ -37,7 +39,10 @@ const DetailedStatus = ({
     });
   };
 
+
+  //handle the progress bar for the current status ( After particular time the current status should be updated )
   useEffect(() => {
+
     setStatusProgress(0);
     if (progressInterval.current) clearInterval(progressInterval.current);
 
@@ -53,6 +58,7 @@ const DetailedStatus = ({
 
     return () => clearInterval(progressInterval.current as NodeJS.Timeout);
   }, [statusIndex]);
+
 
   return createPortal(
     <div

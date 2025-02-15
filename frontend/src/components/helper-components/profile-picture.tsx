@@ -7,6 +7,22 @@ const ProfilePic = ({
   profilePic: string;
   size: number;
 }) => {
+
+  const renderProfile = () => {
+
+    if (profilePic) {
+      return (
+        <img
+          src={profilePic}
+          alt="profile"
+          className="rounded-full aspect-square object-cover"
+        />
+      );
+    }
+    
+    return <ProfileSvg size={size} />;
+  };
+
   return (
     <div
       className=" rounded-full"
@@ -16,15 +32,7 @@ const ProfilePic = ({
         backgroundColor: "gray",
       }}
     >
-      {profilePic ? (
-        <img
-          src={profilePic}
-          alt="profile"
-          className="rounded-full aspect-square object-cover"
-        />
-      ) : (
-        <ProfileSvg size={size} />
-      )}
+      {renderProfile()}
     </div>
   );
 };

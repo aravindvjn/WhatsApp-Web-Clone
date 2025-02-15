@@ -68,9 +68,15 @@ const ChatList = () => {
 
   //Render chat lists
   const renderChatLists = () => {
-
     if (isLoading) {
-      return <div>Loading...</div>;
+      return Array(3)
+        .fill(null)
+        .map((_, i) => (
+          <div
+            key={i}
+            className="animate-pulse delay-75 h-[60px] m-1 rounded border border-border bg-tertiary"
+          ></div>
+        ));
     }
 
     if (chatLists.length === 0) {

@@ -9,10 +9,13 @@ const Header = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [showOptions, setOptions] = useState<boolean>(false);
   const [image, setImage] = useState<string>("");
+
+  //trigger the file input
   const handlePicClick = () => {
     inputRef.current?.click();
   };
 
+  //handle the selected image
   const handleChangeImage = (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) {
       setImage("");
@@ -21,14 +24,18 @@ const Header = () => {
     setImage(URL.createObjectURL(e.target.files[0]));
     setOptions(false);
   };
+
+
   return (
     <div className="flex justify-between items-center p-2 pt-3">
       {image && <StatusPreview image={image} setImage={setImage}  />}
       <Text type="h4" fontWeight="semibold">
         Status
       </Text>
+
       <div className="flex items-center gap-3 text-primaryText">
         <div className="relative">
+
           <div
             onClick={() => setOptions((prev) => !prev)}
             className={`center h-9 w-9 cursor-pointer  rounded-full ${
@@ -37,6 +44,7 @@ const Header = () => {
           >
             <IoMdAdd size={25} />
           </div>
+
           {showOptions && (
             <div className="absolute right-0 overflow-hidden rounded-lg bg-secondary w-[155px] text-[14px] shadow shadow-black/50">
               <button
@@ -50,6 +58,7 @@ const Header = () => {
               </button>
             </div>
           )}
+          
         </div>
         <input
           onChange={handleChangeImage}
