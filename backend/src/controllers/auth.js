@@ -2,15 +2,34 @@ import { hashPassword, verifyPassword } from "../helper/hash-password.js";
 import UserData from "../models/no-password.js";
 import { User } from "../models/user.js";
 import jwt from "jsonwebtoken";
+import { sanitizeObject } from "../utils/sanitize-object.js";
+import { validateSignupInputs } from "../validation/signup-validation.js";
 
 export const signup = async (req, res, next) => {
   try {
-    const { username, email, password } = req.body;
+    const { username, email, password, displayName } = sanitizeObject(req.body);
 
-    if (!username || !email || !password) {
-      return res.status(400).json({ message: "Please fill all fields" });
+    const { file } = req;
+    let mediaUrl;
+
+    if (file) {
+      const type = req.file.mimetype;
+      mediaUrl = `uploads${req.file.path.split("uploads")[1]}`;
+      if (!mediaUrl || !type) {
+        return res.status(400).json({ message: "Invalid Request." });
+      }
     }
 
+    const isVallid = validateSignupInputs({
+      username,
+      email,
+      password,
+    });
+
+    if(!isVallid.success){
+      return res.status(400).json(isVallid.errors);
+    }
+    
     const existingEmail = await User.findOne({ email });
     const existingUserName = await User.findOne({ username });
 
@@ -28,7 +47,13 @@ export const signup = async (req, res, next) => {
       throw new Error();
     }
 
-    const user = new User({ username, email, password: hashedPassword });
+    const user = new User({
+      username,
+      email,
+      password: hashedPassword,
+      profilePic: mediaUrl,
+      displayName: displayName || "Meta User",
+    });
 
     await user.save();
     const token = jwt.sign(
@@ -37,7 +62,6 @@ export const signup = async (req, res, next) => {
       { expiresIn: "7d" }
     );
     const userData = new UserData(user);
-    console.log(userData);
 
     res
       .status(201)

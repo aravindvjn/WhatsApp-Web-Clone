@@ -43,14 +43,15 @@ export const socketConnection = (socket) => {
         status,
       });
       if (!newMessage.success) {
+        console.log("Error saving message:", newMessage);
         return socket.emit("error", "Server not responding.");
       }
+      let newChatList;
       if (sendSocketId) {
         const otherUser = await User.findById(receiverId);
 
         io.to(receiverId).emit("message", newMessage.message);
-        io.to(userId).emit("message", newMessage.message);
-        const newChatList = {
+        newChatList = {
           _id: newMessage.message.chatId,
           lastMessage: newMessage.message,
           otherUser: otherUser
@@ -65,8 +66,9 @@ export const socketConnection = (socket) => {
         };
 
         io.to(receiverId).emit("chatLists", newChatList);
-        io.to(userId).emit("chatLists", newChatList);
       }
+      io.to(userId).emit("message", newMessage.message);
+      io.to(userId).emit("chatLists", newChatList);
     } catch (error) {
       console.error("Error sending message:", error);
     }
@@ -101,7 +103,7 @@ export const socketConnection = (socket) => {
 
   // => Video Call Handlers
   socket.on("videoCallRequest", ({ receiverId, peerId }) => {
-    console.log("Video call request")
+    console.log("Video call request");
     io.to(receiverId).emit("videoCallRequest", { peerId, senderId: userId });
   });
 

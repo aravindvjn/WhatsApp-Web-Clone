@@ -2,9 +2,14 @@ import React, { useRef, useState } from "react";
 import ProfileSvg from "../../ui/profilesvg";
 import { BsCamera } from "react-icons/bs";
 
-const ProfilePic = ({ profilePic }: { profilePic: string }) => {
-  const [hover, setHover] = useState(false); 
-  const [profile, setProfile] = useState<File | string>(profilePic);
+const ProfilePic = ({
+  profile,
+  setProfile,
+}: {
+  profile: string;
+  setProfile: React.Dispatch<React.SetStateAction<string>>;
+}) => {
+  const [hover, setHover] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleProfilePicClick = () => {

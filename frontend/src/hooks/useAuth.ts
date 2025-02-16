@@ -9,13 +9,39 @@ export type LoginType = {
 }
 
 const authFn = async (input: InputType): Promise<LoginType> => {
-  
+
+  console.log("inputs", input);
+
+  const formData = new FormData()
+  formData.append("email", input.email);
+  formData.append("password", input.password);
+
+
+  if (!input.isLogin) {
+    if (!input.username) {
+      throw new Error("Username is required for signup");
+    }
+    formData.append("username", input.username);
+    formData.append("displayName", input.displayName || '');
+
+    if (input.profilePic) {
+      try {
+        const croppedBlob = await fetch(input.profilePic).then(res => res.blob());
+        const profilePic = new File([croppedBlob], "cropped-image.jpg", {
+          type: "image/jpeg",
+        });
+        formData.append("profilePic", profilePic);
+        console.log("Profile Pic:", profilePic);
+      } catch (error) {
+        console.error("Failed to process profile picture", error);
+        throw new Error("Profile picture processing failed");
+      }
+    }
+  }
+
   const response = await fetch(`${backendUrl}/auth/${input.isLogin ? "signin" : "signup"}`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(input),
+    body: formData,
   });
 
   const data = await response.json();

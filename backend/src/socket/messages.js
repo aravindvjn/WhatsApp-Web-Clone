@@ -6,23 +6,42 @@ export const saveMessageToDB = async ({
   chatId,
   message,
   receiverId,
-  status
+  status,
 }) => {
   try {
-    
     if (!message) {
       return { message: "Please provide a message", success: false };
     }
     if (!receiverId) {
       throw new Error();
     }
+    if (!chatId) {
+      if (!receiverId) {
+        throw new Error();
+      }
 
+      const existingChat = await Chat.findOne({
+        participants: { $all: [user.id, receiverId] },
+      });
+
+      if (existingChat) {
+        chatId = existingChat._id;
+      } else {
+        const chat = new Chat({
+          participants: [user.id, receiverId],
+        });
+
+        await chat.save();
+
+        chatId = chat._id;
+      }
+    }
     const newMessage = new Message({
       chatId: chatId,
       senderId: user.id,
       text: message,
       receiverId,
-      status:status || 'sent'
+      status: status || "sent",
     });
 
     await newMessage.save();
@@ -34,7 +53,6 @@ export const saveMessageToDB = async ({
       { lastMessage: newMessage._id },
       { new: true }
     );
-
     return { message: newMessage, success: true };
   } catch (error) {
     console.error(error);

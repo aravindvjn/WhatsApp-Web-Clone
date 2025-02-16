@@ -70,7 +70,7 @@ const Chats = ({
   //Render the messages components 
   const renderMessages = ()=>{
     if(uniqueMessages.length === 0){
-      return <p className="text-center text-gray-400">No messages yet.</p>
+      return <p className="text-center text-gray-400 text-[12px] pt-5">No messages yet.</p>
     }
 
     return uniqueMessages.map((message) => {
@@ -94,7 +94,7 @@ const Chats = ({
       {renderMessages()}
 
       {/* Typing indicator */}
-      {isTyping === chatId && (
+      {isTyping === chatId && chatId && (
         <p className="bg-secondary w-fit py-[7px] px-[10px] rounded-full flex items-center gap-1">
           <span className="dot-animation w-1.5 h-1.5 bg-white rounded-full"></span>
           <span className="dot-animation w-1.5 h-1.5 bg-white rounded-full animation-delay-200"></span>
