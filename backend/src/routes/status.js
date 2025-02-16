@@ -4,6 +4,8 @@ import { upload } from "../middlewares/upload-media.js";
 
 const router = Router();
 
+// status 
+
 router.get("/", getStatus);
 
 router.post("/", upload.single("media"), createStatus);

@@ -35,8 +35,10 @@ export const signup = async (req, res, next) => {
 
     if (existingEmail && existingUserName) {
       return res.status(400).json({ message: "User already exists" });
+
     } else if (existingEmail) {
       return res.status(400).json({ message: "Email already exists" });
+      
     } else if (existingUserName) {
       return res.status(400).json({ message: "Username already exists" });
     }

@@ -5,6 +5,8 @@ import { upload } from "../middlewares/upload-media.js";
 
 const router = express.Router();
 
+// auth
+
 router.post("/signup", upload.single("profilePic"), signup);
 
 router.post("/signin", signin);

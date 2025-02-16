@@ -1,6 +1,7 @@
 import { Status } from "../models/status.js";
 import { Chat } from "../models/chat.js";
 
+
 export const createStatus = async (req, res) => {
   try {
     if (!req.file) {
@@ -28,6 +29,7 @@ export const createStatus = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
 
 export const updateViews = async (req, res) => {
   try {

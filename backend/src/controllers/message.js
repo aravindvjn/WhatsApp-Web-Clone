@@ -1,8 +1,10 @@
 import { Chat } from "../models/chat.js";
 import { Message } from "../models/mesage.js";
 
+
 export const sendMessage = async (req, res) => {
   try {
+
     const { user } = req;
     let { chatId, message, receiverId } = req.body;
 
@@ -51,6 +53,8 @@ export const sendMessage = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
+
 
 export const getMessages = async (req, res) => {
   try {

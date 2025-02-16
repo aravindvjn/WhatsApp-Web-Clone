@@ -53,8 +53,10 @@ export const saveMessageToDB = async ({
       { lastMessage: newMessage._id },
       { new: true }
     );
+    
     return { message: newMessage, success: true };
   } catch (error) {
+
     console.error(error);
     return { message: "Failed to save message", success: false };
   }

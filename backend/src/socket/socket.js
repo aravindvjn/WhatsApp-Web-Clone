@@ -27,14 +27,19 @@ export const socketConnection = (socket) => {
   });
 
   socket.on("message", async ({ receiverId, message, chatId }) => {
+
     try {
+
       if (!receiverId || !message) {
         return socket.emit("error", "Invalid message or recipient.");
       }
+
       const status = Array.from(onlineUsers.keys()).includes(receiverId)
         ? "delivered"
         : "sent";
+
       const sendSocketId = onlineUsers.get(receiverId);
+
       const newMessage = await saveMessageToDB({
         user,
         receiverId,
@@ -42,11 +47,14 @@ export const socketConnection = (socket) => {
         chatId,
         status,
       });
+
       if (!newMessage.success) {
         console.log("Error saving message:", newMessage);
         return socket.emit("error", "Server not responding.");
       }
+
       let newChatList;
+
       if (sendSocketId) {
         const otherUser = await User.findById(receiverId);
 
@@ -67,8 +75,10 @@ export const socketConnection = (socket) => {
 
         io.to(receiverId).emit("chatLists", newChatList);
       }
+
       io.to(userId).emit("message", newMessage.message);
       io.to(userId).emit("chatLists", newChatList);
+
     } catch (error) {
       console.error("Error sending message:", error);
     }
@@ -96,6 +106,7 @@ export const socketConnection = (socket) => {
 
       io.to(senderId).emit("messageRead", { chatId, messageId });
       console.log("Marked as read as emitted");
+      
     } catch (error) {
       console.error("Error in marking messages as read", error);
     }

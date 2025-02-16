@@ -12,8 +12,9 @@ export const isAuthenticatedBySocket = (socket, next) => {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       
       socket.user = decoded; 
-      socket.currentChat = socket
+      socket.currentChat = socket;
       next(); 
+
     } catch (err) {
       next(new Error("Invalid token"));
     }

@@ -13,6 +13,7 @@ export const isAuthenticated = async (req, res, next) => {
     
     req.user = decoded;
     if (!req.user) return res.status(401).json({ message: "Not authenticated" });
+    
     next();
   } catch (error) {
     res.status(401).json({ message: "Not authenticated" });
