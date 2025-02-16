@@ -44,6 +44,7 @@ const ChatSecondaryScreen = () => {
         onlineUsers={onlineUsers || []}
         chatId={openedChat?._id || ""}
         otherUser={openedChat?.otherUser}
+        user_id={currentUser?._id || ""}
       />
     </div>
   );

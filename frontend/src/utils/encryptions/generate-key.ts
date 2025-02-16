@@ -1,6 +1,6 @@
-import crypto from 'crypto';
-export const generateKey = (user1_id: string, user2_id: string) => {
-    const sortedId = [user1_id, user2_id].sort().join('')
+import SHA256 from "crypto-js/sha256";
 
-    return crypto.createHash("sha256").update(sortedId).digest()
-}
+export const generateKey = (user1_id:string, user2_id:string) => {
+  const sortedId = [user1_id, user2_id].sort().join('');
+  return SHA256(sortedId).toString();
+};

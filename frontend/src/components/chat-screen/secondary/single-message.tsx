@@ -5,6 +5,7 @@ import { useDeliveredMessageId } from "../../../hooks/useMessages";
 import { useEffect, useState } from "react";
 import { useSocket } from "../../../utils/socket/socket";
 import Text from "../../../ui/text";
+import { decryptMessage } from "../../../utils/encryptions/decrypt-message";
 
 type MessageStatusType = "sent" | "delivered" | "read";
 
@@ -54,10 +55,8 @@ const SingleMessge = ({
         senderId: messages.senderId,
       });
     }
-    
+
     socket?.on("messageRead", (data) => {
-      console.log(data);
-      console.log(data.messageId === messages._id);
       if (data.messageId === messages._id) {
         setStatus("read");
       }
@@ -68,6 +67,13 @@ const SingleMessge = ({
     };
   }, [messages._id]);
 
+  const message = decryptMessage({
+    encryptedMessage: messages.text,
+    senderId: messages.senderId,
+    receiverId: messages.receiverId,
+  })
+  if(!message) return;
+  
   return (
     <div
       className={`relative rounded-lg w-fit flex-col flex gap-3 max-w-[250px] md:max-w-[300px] lg:max-w-[400px] text-[13px] md:text-[14px] py-[5px] px-[10px] ${
@@ -77,7 +83,7 @@ const SingleMessge = ({
       }`}
     >
       <p className="text-[13px] items-end gap-2 md:text-[14px] text-start">
-        {messages.text}
+        {message}
         <span className="text-[10px] bg-red text-gray-400 flex items-center self-end gap-[2px]">
           {formatTimestamp(messages.timestamp)}
           {renderStatus()}

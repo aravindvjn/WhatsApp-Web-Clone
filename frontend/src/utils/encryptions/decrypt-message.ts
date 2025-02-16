@@ -1,23 +1,14 @@
-import { generateKey } from "./generate-key"
-import crypto from 'crypto'
+import AES from "crypto-js/aes";
+import Utf8 from "crypto-js/enc-utf8";
+import { generateKey } from "./generate-key";
 
-export const decrypteMessage = ({
-    encryptedMessage,
-    senderId,
-    receiverId
-}: {
+export const decryptMessage = ({ encryptedMessage, senderId, receiverId }: {
     encryptedMessage: string,
     senderId: string,
     receiverId: string
-})=>{
-
-    const key = generateKey(senderId, receiverId)
-
-    const iv = Buffer.alloc(16,0)
-    const decipher = crypto.createDecipheriv("aes-256-ocb",key,iv) 
-
-    let decrypted = decipher.update(encryptedMessage,'hex','utf8')
-    decrypted += decipher.final('utf8')
-    
-    return decrypted
-}
+}) => {
+    const key = generateKey(senderId, receiverId);
+    console.log(key);
+    const decryptedBytes = AES.decrypt(encryptedMessage, key);
+    return decryptedBytes.toString(Utf8) || '';
+};

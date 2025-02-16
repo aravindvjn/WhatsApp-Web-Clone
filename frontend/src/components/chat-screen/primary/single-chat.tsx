@@ -6,6 +6,7 @@ import { useModifyQuery } from "../../../utils/helper/inValidateQuery";
 import ProfileSvg from "../../../ui/profilesvg";
 import { useEffect } from "react";
 import ProfilePic from "../../helper-components/profile-picture";
+import { decryptMessage } from "../../../utils/encryptions/decrypt-message";
 
 const SingleChat = ({
   _id,
@@ -14,7 +15,6 @@ const SingleChat = ({
   typingUsers,
   read,
 }: ChatsType & { typingUsers: any; read: boolean }) => {
-
   //Get opened chat
   const { data: openedChat } = useOpenedChat();
 
@@ -42,7 +42,13 @@ const SingleChat = ({
     if (typingUsers.includes(chatId)) {
       return <p className="text-[12px] text-green  font-normal">typing...</p>;
     }
-    return lastMessage?.text;
+    return lastMessage
+      ? decryptMessage({
+          encryptedMessage: lastMessage?.text,
+          receiverId: lastMessage?.receiverId,
+          senderId: lastMessage?.senderId,
+        })
+      : null;
   };
 
   //Remove typing user from typingUsers when last message is arrives
@@ -59,13 +65,11 @@ const SingleChat = ({
         openedChat?._id === _id ? "bg-secondary" : ""
       }`}
     >
-
       <div>
         <ProfilePic profilePic={otherUser?.profilePic || ""} size={42} />
       </div>
 
       <div className="flex py-[15px] w-full border-b border-white/10 gap-[10px] justify-between">
-
         <div>
           <Text fontWeight="semibold" className="line-clamp-1">
             {otherUser?.displayName || otherUser?.username}
@@ -83,7 +87,6 @@ const SingleChat = ({
 
         <p className="text-[10px] opacity-55 pr-[5px]">{lastMessageTime}</p>
       </div>
-      
     </div>
   );
 };

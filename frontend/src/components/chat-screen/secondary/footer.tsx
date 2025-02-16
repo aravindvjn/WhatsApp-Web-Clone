@@ -2,14 +2,17 @@ import React, { useState } from "react";
 import { FaMicrophone } from "react-icons/fa";
 import { useSocket } from "../../../utils/socket/socket";
 import MoreChatOpions from "./more-chatoptions";
+import { encryptMessage } from "../../../utils/encryptions/encrypt-message";
 
 const Footer = ({
   chatId,
   otherUser,
+  user_id,
 }: {
   chatId: string;
   otherUser: any;
   onlineUsers: string[];
+  user_id: string;
 }) => {
   const { sendMessages, socket } = useSocket();
 
@@ -22,7 +25,11 @@ const Footer = ({
 
     if (message && (chatId || otherUser._id)) {
       sendMessages({
-        message,
+        message: encryptMessage({
+          message,
+          receiverId: otherUser._id,
+          senderId: user_id,
+        }),
         chatId,
         receiverId: otherUser._id,
       });
@@ -64,7 +71,6 @@ const Footer = ({
       <button type="button" className="center w-[50px]">
         <FaMicrophone size={20} />
       </button>
-      
     </form>
   );
 };
