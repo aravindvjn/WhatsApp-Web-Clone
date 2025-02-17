@@ -10,9 +10,9 @@ export type LoginType = {
 
 const authFn = async (input: InputType): Promise<LoginType> => {
 
-  console.log("inputs", input);
 
   const formData = new FormData()
+
   formData.append("email", input.email);
   formData.append("password", input.password);
 
@@ -21,7 +21,7 @@ const authFn = async (input: InputType): Promise<LoginType> => {
     if (!input.username) {
       throw new Error("Username is required for signup");
     }
-    formData.append("username", input.username);
+    formData.append("username", input.username.toLowerCase().replace(/[^a-z0-9_]/g, ""));
     formData.append("displayName", input.displayName || '');
 
     if (input.profilePic) {
@@ -47,7 +47,7 @@ const authFn = async (input: InputType): Promise<LoginType> => {
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error(data.message || "Login failed");
+    throw new Error("Login failed");
   }
 
   localStorage.setItem("token", data.token);

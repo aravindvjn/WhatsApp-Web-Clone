@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken"; 
 
 
+// middleware for socket.io authentication
 export const isAuthenticatedBySocket = (socket, next) => {
     const token = socket.handshake.auth.token;
   
@@ -9,10 +10,13 @@ export const isAuthenticatedBySocket = (socket, next) => {
     }
   
     try {
+      // Verify the token using the secret key
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       
+      // If the token is valid, attach the decoded user data to the socket
       socket.user = decoded; 
       socket.currentChat = socket;
+
       next(); 
 
     } catch (err) {

@@ -3,10 +3,10 @@ import { ChatsType } from "../types";
 import { useOpenedChat } from "../../../hooks/useOpenedChat";
 import { timeAgo } from "../../../utils/helper/time-ago";
 import { useModifyQuery } from "../../../utils/helper/inValidateQuery";
-import ProfileSvg from "../../../ui/profilesvg";
 import { useEffect } from "react";
 import ProfilePic from "../../helper-components/profile-picture";
 import { decryptMessage } from "../../../utils/encryptions/decrypt-message";
+
 
 const SingleChat = ({
   _id,
@@ -15,7 +15,8 @@ const SingleChat = ({
   typingUsers,
   read,
 }: ChatsType & { typingUsers: any; read: boolean }) => {
-  //Get opened chat
+
+  //Get opened chat 
   const { data: openedChat } = useOpenedChat();
 
   //Use modify query to update opened chat
@@ -39,9 +40,11 @@ const SingleChat = ({
 
   //render typing indicator when user is typing in a chat
   const renderTypingIndicator = (chatId: string) => {
+
     if (typingUsers.includes(chatId)) {
       return <p className="text-[12px] text-green  font-normal">typing...</p>;
     }
+
     return lastMessage
       ? decryptMessage({
           encryptedMessage: lastMessage?.text,
@@ -65,6 +68,7 @@ const SingleChat = ({
         openedChat?._id === _id ? "bg-secondary" : ""
       }`}
     >
+      
       <div>
         <ProfilePic profilePic={otherUser?.profilePic || ""} size={42} />
       </div>

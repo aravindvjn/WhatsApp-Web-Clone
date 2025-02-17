@@ -26,10 +26,12 @@ const ChatSecondaryScreen = () => {
   return (
     <div className="h-dvh relative w-full">
       <Header
-        roomId={generateRoomId(openedChat.otherUser._id, currentUser?._id || "")}
+        roomId={generateRoomId(
+          openedChat.otherUser._id,
+          currentUser?._id || ""
+        )}
         onlineUsers={onlineUsers || []}
       />
-
       <Chats
         isTyping={isTyping}
         setIsTyping={setIsTyping}

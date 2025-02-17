@@ -28,14 +28,17 @@ const AuthForm = () => {
   const { mutate: login, isPending, error } = useAuth();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setValidationError("");
     setInputs((prev) => ({
       ...prev,
-      [e.target.name]:
-        e.target.name !== "displayName"
-          ? e.target.value.trim()
-          : e.target.value,
+      [e.target.name]: e.target.name === "username"
+        ? e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, "") 
+        : e.target.name !== "displayName"
+        ? e.target.value.trim()
+        : e.target.value,
     }));
   };
+  
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -59,6 +62,9 @@ const AuthForm = () => {
 
   const buttonClass =
     "bg-secondary text-white w-full px-3 py-2 rounded hover:bg-tertiary";
+
+  const inputClass =
+    "bg-secondary w-full focus:outline-none px-3 py-1.5 rounded placeholder:text-secondaryText";
 
   if (showPicOption && !isLogin) {
     return (
@@ -93,7 +99,7 @@ const AuthForm = () => {
         <input
           maxLength={15}
           min={3}
-          className="bg-secondary w-full focus:outline-none px-3 py-1.5 rounded placeholder:text-secondaryText"
+          className={inputClass}
           onChange={handleInputChange}
           value={inputs?.username}
           type="text"
@@ -103,7 +109,7 @@ const AuthForm = () => {
       )}
 
       <input
-        className="bg-secondary w-full focus:outline-none px-3 py-1.5 rounded placeholder:text-secondaryText"
+        className={inputClass}
         onChange={handleInputChange}
         value={inputs?.email}
         type="email"
@@ -112,7 +118,7 @@ const AuthForm = () => {
       />
       <input
         minLength={8}
-        className="bg-secondary w-full focus:outline-none px-3 py-1.5 rounded placeholder:text-secondaryText"
+        className={inputClass}
         onChange={handleInputChange}
         value={inputs?.password}
         type="text"

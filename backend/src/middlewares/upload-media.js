@@ -1,11 +1,13 @@
 import fs from "fs";
 import multer from "multer";
 
+// creating a new folder if it doesn't exist
 const uploadDir = "src/uploads/";
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
 
+// configuring multer to save files in the uploads folder with unique filenames and timestamps
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "src/uploads/");
@@ -16,6 +18,7 @@ const storage = multer.diskStorage({
   },
 });
 
+// defining the file filter to allow only certain file types
 const fileFilter = (req, file, cb) => {
   const allowedTypes = [
     "image/jpeg",
@@ -36,6 +39,7 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
+// exporting the multer middleware with the configured storage and file filter
 export const upload = multer({
   storage,
   fileFilter,

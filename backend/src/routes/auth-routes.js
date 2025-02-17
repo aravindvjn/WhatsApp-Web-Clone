@@ -9,7 +9,7 @@ const router = express.Router();
 
 router.post("/signup", upload.single("profilePic"), signup);
 
-router.post("/signin", signin);
+router.post("/signin",upload.none(), signin);
 
 router.get("/current-user", isAuthenticated, getUserProfile);
 

@@ -1,6 +1,6 @@
 import { User } from "../models/user.js";
 
-
+//Getting all users by search query
 export const getAllUsers = async (req, res) => {
   try {
     const { search } = req.query;
